@@ -1,0 +1,39 @@
+const onSubmit = async (data) => {
+  try {
+    dispatch(setLoading(true));
+
+    // Create FormData dynamically
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "file" && value?.[0]) {
+        formData.append("file", value[0]); // Handle file separately
+      } else {
+        formData.append(key, value);
+      }
+    });
+
+    // API call
+    const res = await signupUser(formData);
+
+    if (res.success) {
+      dispatch(setUser(res.user));
+      navigate("/");
+      toast.success(res.message || "Signup successful!");
+    }
+  } catch (error) {
+    console.error(error);
+    const errorMessage = error.response?.data?.message || "Something went wrong!";
+    toast.error(errorMessage);
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+// Extract API call to a separate function
+const signupUser = async (formData) => {
+  const response = await axios.post(`${USER_API_END_POINT}/signup`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true,
+  });
+  return response.data;
+};
