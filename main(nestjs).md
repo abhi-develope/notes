@@ -1,5 +1,16 @@
-# initial main.ts for nest project
+# NestJS Project – `main.ts` Setup
 
+This project uses a custom `main.ts` bootstrap file with the following features:
+
+- ✅ Global Validation with `ValidationPipe`
+- 🚀 Swagger documentation via `@nestjs/swagger`
+- 🌐 CORS enabled for all origins
+- ⚙️ Environment-based config via `@nestjs/config`
+- 📌 API routes prefixed with `/api`
+
+## `main.ts`
+
+```ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -23,7 +34,7 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger setup (optional but good for development)
+  // Swagger setup
   const config = new DocumentBuilder()
     .setTitle('My API')
     .setDescription('API documentation')
@@ -34,11 +45,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, document);
 
-  // Use ConfigService if you're using @nestjs/config
+  // Get PORT from environment
   const configService = app.get(ConfigService);
   const PORT = configService.get('PORT') || 3000;
 
   await app.listen(PORT);
-  console.log(` Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 }
+
 bootstrap();
