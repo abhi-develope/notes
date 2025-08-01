@@ -44,26 +44,32 @@ export class UserSleepRecordsDTO {
     return transformed;
   }
 }
-✅ Usage in Service
-ts
-Copy
-Edit
+```
+
+### ✅ Usage in Service
+
+```ts
 return {
   error: false,
   statusCode: HttpStatus.OK,
   msg: 'Sleep record created successfully !!',
   data: UserSleepRecordsDTO.transform(newSleepRecord),
 };
-✨ Recommended: Use class-transformer
-Step 1: Install
-bash
-Copy
-Edit
+```
+
+---
+
+## ✨ Recommended: Use `class-transformer`
+
+### Step 1: Install
+
+```bash
 npm install class-transformer
-Step 2: Use @Expose() in DTO
-ts
-Copy
-Edit
+```
+
+### Step 2: Use `@Expose()` in DTO
+
+```ts
 import { Expose } from 'class-transformer';
 
 export class UserSleepRecordsDTO {
@@ -82,10 +88,11 @@ export class UserSleepRecordsDTO {
   @Expose()
   createdAt: Date;
 }
-Step 3: Use plainToInstance() in Service
-ts
-Copy
-Edit
+```
+
+### Step 3: Use `plainToInstance()` in Service
+
+```ts
 import { plainToInstance } from 'class-transformer';
 
 return {
@@ -96,10 +103,13 @@ return {
     excludeExtraneousValues: true,
   }),
 };
-🧱 Optional: Create BaseDTO for Reusability
-ts
-Copy
-Edit
+```
+
+---
+
+## 🧱 Optional: Create `BaseDTO` for Reusability
+
+```ts
 // base.dto.ts
 import { plainToInstance } from 'class-transformer';
 
@@ -110,10 +120,11 @@ export abstract class BaseDTO {
     });
   }
 }
-Extend in Your DTO
-ts
-Copy
-Edit
+```
+
+### Extend in Your DTO
+
+```ts
 import { Expose } from 'class-transformer';
 import { BaseDTO } from './base.dto';
 
@@ -133,45 +144,41 @@ export class UserSleepRecordsDTO extends BaseDTO {
   @Expose()
   createdAt: Date;
 }
-Usage in Service
-ts
-Copy
-Edit
+```
+
+### Usage in Service
+
+```ts
 return {
   error: false,
   statusCode: HttpStatus.OK,
   msg: 'Sleep record created successfully !!',
   data: UserSleepRecordsDTO.transform(newSleepRecord),
 };
-⚙️ (Optional) Use Global Interceptor
-If you're always transforming DTOs, you could create a global response transformer interceptor. This is optional and should be used only when response formats are consistent across your project.
-
-✅ Summary Comparison
-Feature	Manual .transform() Method	class-transformer with BaseDTO
-🔒 Secure Fields	✅	✅
-🔁 Reusability	❌ Repeated in each DTO	✅ Single BaseDTO base class
-📚 Swagger Support	✅	✅
-🧼 Clean Code	😐 Moderate	✅ Clean + declarative
-🚫 Dependencies	❌	✅ Requires class-transformer
-
-✅ Recommendation
-Use class-transformer with @Expose() + BaseDTO.transform() for a more scalable, reusable, and declarative response handling strategy.
-
-This structure improves maintainability, reduces boilerplate code, and increases clarity of your API responses.
-
-yaml
-Copy
-Edit
+```
 
 ---
 
-Let me know if you want the same format for request DTO validation, error handling structure, or setting up interceptors as well!
+## ⚙️ (Optional) Use Global Interceptor
 
+If you're always transforming DTOs, you could create a global response transformer interceptor. This is optional and should be used only when response formats are consistent across your project.
 
+---
 
+## ✅ Summary Comparison
 
+| Feature                    | Manual `.transform()` Method | `class-transformer` with BaseDTO |
+|---------------------------|------------------------------|----------------------------------|
+| 🔒 Secure Fields           | ✅                            | ✅                                |
+| 🔁 Reusability             | ❌ Repeated in each DTO       | ✅ Single `BaseDTO` base class   |
+| 📚 Swagger Support         | ✅                            | ✅                                |
+| 🧼 Clean Code              | 😐 Moderate                   | ✅ Clean + declarative           |
+| 🚫 Dependencies            | ❌                            | ✅ Requires `class-transformer`  |
 
+---
 
+## ✅ Recommendation
 
+Use `class-transformer` with `@Expose()` + `BaseDTO.transform()` for a more scalable, reusable, and declarative response handling strategy.
 
-Ask ChatGPT
+> This structure improves maintainability, reduces boilerplate code, and increases clarity of your API responses.
