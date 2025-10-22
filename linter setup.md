@@ -8,7 +8,7 @@ This guide explains how to set up **ESLint** and **Prettier** in both the **fron
 
 Run this command in **both** `frontend/` and `backend/` folders:
 
-```bash
+
 npm install --save-dev eslint prettier
 🧩 Step 2: Initialize ESLint
 
