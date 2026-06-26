@@ -1,0 +1,81 @@
+Updated rooms.js
+// socket/rooms.js
+
+export const ROOMS = {
+  USER: "user",
+  ROLE: "role",
+  DEPARTMENT: "department",
+  DEPARTMENT_NAME: "department-name",
+};
+
+/**
+ * Join all rooms for the connected user.
+ *
+ * Current Rooms:
+ * -------------------------------
+ * user:<userId>
+ * <loginRole>
+ * department:<departmentId>
+ * department-name:<departmentName>
+ *
+ * Examples:
+ * -------------------------------
+ * user:684a123
+ * CONSULTANT
+ * department:684b456
+ * department-name:Cardiology
+ */
+export const joinRooms = (socket) => {
+  const {
+    userId,
+    loginRole,
+    departmentId,
+    department,
+    name,
+  } = socket.user;
+
+  const joinedRooms = [];
+
+  // Personal Room
+  if (userId) {
+    const room = `${ROOMS.USER}:${userId}`;
+    socket.join(room);
+    joinedRooms.push(room);
+  }
+
+  // Role Room
+  if (loginRole) {
+    socket.join(loginRole);
+    joinedRooms.push(loginRole);
+  }
+
+  // Department Id Room
+  if (departmentId) {
+    const room = `${ROOMS.DEPARTMENT}:${departmentId}`;
+    socket.join(room);
+    joinedRooms.push(room);
+  }
+
+  // Department Name Room
+  if (department) {
+    const room = `${ROOMS.DEPARTMENT_NAME}:${department}`;
+    socket.join(room);
+    joinedRooms.push(room);
+  }
+
+  console.log(
+    `[Socket] ${name} joined -> ${joinedRooms.join(", ")}`
+  );
+};
+
+ Now Look How Powerful This Becomes
+Notify every consultant
+io.to("CONSULTANT").emit(...);
+Notify every nurse
+io.to("NURSING").emit(...);
+Notify only Cardiology department
+io.to(`department:${departmentId}`).emit(...);
+Notify only one user
+io.to(`user:${userId}`).emit(...);
+Notify Radiology department (using name)
+io.to("department-name:Radiology").emit(...);
